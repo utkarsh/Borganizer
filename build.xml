@@ -1,0 +1,37 @@
+<project default="run">
+    <property name="src.dir" value="src"/>
+    <property name="jar.name" value="borganizer.jar"/>
+    <property name="main.class" value="org.borganizer.flickr.Main"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="libs.dir" value="libs"/>
+    <property name="classes.path" value="${dist.dir}/classes"/>
+    <property name="jar.path" value="${dist.dir}/${jar.name}"/>
+
+    <target name="clean">
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <path id="libs.path">
+        <fileset dir="libs" includes="*.jar"/>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="${classes.path}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.path}">
+            <classpath refid="libs.path"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${jar.path}" basedir="${classes.path}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${jar.path}" fork="true"/>
+    </target>
+
+</project>
